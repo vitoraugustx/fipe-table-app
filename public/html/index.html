@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../js/script.js" defer></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="../css/style.css">
+        <title>Auto App</title>
+    </head>
+    <body>
+        <div id='container'>
+            <select class="form-control" id = "form-vehicle-type" onchange="getVehicle()">
+                <option value="0">Selecione a categoria do veículos</option>
+                <option value="car">CARROS E UTILITÁRIOS</option>
+                <option value="motorcycle">MOTOS</option>
+                <option value="truck">CAMINHÕES E MICRO-ÔNIBUS</option>
+            </select>
+            <br>
+            <select class="form-control" id = "form-vehicle-brand" onchange="getEventData()">
+                <option value="0">Selecione a marca do veículo</option>
+            </select>
+            <br>
+            <select class="form-control" id = "form-vehicle-model" onchange="getEventData()">
+                <option value="0">Selecione o modelo do veículo</option>
+            </select>
+            <br>
+            <select class="form-control" id = "form-vehicle-year" onchange="getEventData()">
+                <option value="0">Selecione o ano do veículo</option>
+            </select>
+            <br>
+            <div id="result"></div>
+
+        </div>
+    </body>
+</html>
