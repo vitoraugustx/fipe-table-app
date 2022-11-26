@@ -99,7 +99,6 @@ async function getYears(){
   var value = type_form.options[type_form.selectedIndex].value;
   var model_number = model_form.options[model_form.selectedIndex].id;
   var brand_number = model_form.options[model_form.selectedIndex].value;  
-  let year_array, price_array = []
   let data
   if (value == "car"){
     const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
@@ -116,8 +115,8 @@ async function getYears(){
   } else {
     console.log("error")
   }
-  price_array, year_array = getAllYearsPrices(data)
-  console.log(getAllYearsPrices(data))
+  let year_price = await getAllYearsPrices(data)
+  console.log(year_price)
 }
 
 async function getVehiclePrice(){
@@ -162,21 +161,25 @@ function renderPrice(data){
   result_div.innerHTML += list;
 }
 
-function getAllYearsPrices(data){
+async function getAllYearsPrices(data){
   let year_array = []
   let aux_price_array = []
   let price_array = []
+  let year_price = {}
   for(let i = 0; i < data.length; i++){
     year_array.push(data[i].nome.slice(0,4))
     year_array.sort()
-    aux_price_array.push(getPrice(data[i].codigo))
+    aux_price_array.push(await getPrice(data[i].codigo))
   }
   for (let i = 0; i < aux_price_array.length; i++){
-    aux_price_array[i].then((data) => price_array.push(data.replace("R$ ", "").replace(".", "").replace(",", ".")))
-    
+    price_array.push(aux_price_array[i].replace('R$ ','').replace('.','').replace(',','.'))
   }
-  return price_array, year_array
-}
+  price_array.sort()
+  for (let i = 0; i < year_array.length; i++){
+    year_price[year_array[i]] = price_array[i]
+  }
+  return year_price
+} 
 
 async function getPrice(year_number){
   var value = type_form.options[type_form.selectedIndex].value;
