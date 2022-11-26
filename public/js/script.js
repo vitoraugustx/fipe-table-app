@@ -115,8 +115,49 @@ async function getYears(){
   } else {
     console.log("error")
   }
+  // Tratamento para o código 32000-1 (errado)
+  for (let i = 0; i < data.length; i++){
+    if (data[i].codigo == '32000-1'){
+      data.splice(i, 1)
+    }
+  }
   let year_price = await getAllYearsPrices(data)
-  console.log(year_price)
+  plotGraph(year_price)
+}
+
+function plotGraph(year_price){
+  var ctx = document.getElementById('plot')
+  var year_array = []
+  var price_array = []
+  for (let i = 0; i < year_price.length; i++){
+    year_array.push(year_price[i]['year'])
+    price_array.push(year_price[i]['price'])
+  }
+
+  // Define the data
+  var data = [{
+    x: year_array,
+    y: price_array,
+    mode: 'lines+markers',
+    type: 'scatter'
+  }];
+  // Define the plot layout
+  var layout = {
+    title: 'Preço do veículo ao longo dos anos',
+    xaxis: {
+      title: 'Ano',
+      range: [Math.min(year_array), Math.max(year_array)],
+      autotick: false
+    },
+    yaxis: {
+      title: 'Preço (R$)',
+      range: [Math.min(price_array), Math.max(price_array)],
+      tickformat: '$,.'
+    }
+  };
+  // Display the plot
+  Plotly.newPlot('plot', data, layout);
+  
 }
 
 async function getVehiclePrice(){
@@ -165,18 +206,20 @@ async function getAllYearsPrices(data){
   let year_array = []
   let aux_price_array = []
   let price_array = []
-  let year_price = {}
+  let year_price = []
   for(let i = 0; i < data.length; i++){
     year_array.push(data[i].nome.slice(0,4))
     year_array.sort()
     aux_price_array.push(await getPrice(data[i].codigo))
   }
   for (let i = 0; i < aux_price_array.length; i++){
-    price_array.push(aux_price_array[i].replace('R$ ','').replace('.','').replace(',','.'))
+    // Transforma o preço em float
+    price_array.push(aux_price_array[i].replace('R$ ','').replaceAll('.','').replaceAll(',','.'))
+    //price_array.push(aux_price_array[i])
   }
   price_array.sort()
   for (let i = 0; i < year_array.length; i++){
-    year_price[year_array[i]] = price_array[i]
+    year_price = year_price.concat({year: year_array[i], price: price_array[i]})
   }
   return year_price
 } 
