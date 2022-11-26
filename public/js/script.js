@@ -102,9 +102,10 @@ async function getYears(){
   if (value == "car"){
     const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
+    console.log(data)
     // Tratamento para o código 32000-1 (errado)
     for (let i = 0; i < data.length; i++){
-      if (data[i].codigo == '32000-1'){
+      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
         data.splice(i, 1)
       }
     }
@@ -114,7 +115,7 @@ async function getYears(){
     data = await response.json()
     // Tratamento para o código 32000-1 (errado)
     for (let i = 0; i < data.length; i++){
-      if (data[i].codigo == '32000-1'){
+      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
         data.splice(i, 1)
       }
     }
@@ -123,7 +124,7 @@ async function getYears(){
     const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
     for (let i = 0; i < data.length; i++){
-      if (data[i].codigo == '32000-1'){
+      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
         data.splice(i, 1)
       }
     }
@@ -132,7 +133,7 @@ async function getYears(){
     console.log("error")
   }
   let year_price = await getAllYearsPrices(data)
-  plotGraph(year_price)
+  //plotGraph(year_price)
 }
 
 function plotGraph(year_price){
@@ -190,6 +191,11 @@ async function getVehiclePrice(){
   } else {
     console.log("error")
   }
+}
+
+function search() {
+  var display = document.getElementById("result").style.display;
+  document.getElementById("result").style.display = 'block';
 }
 
 function renderPrice(data){
