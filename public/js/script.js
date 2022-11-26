@@ -191,11 +191,13 @@ async function getVehiclePrice(){
   } else {
     console.log("error")
   }
+  document.getElementById("result").style.display = 'block';
+  window.location.href='#result';
 }
 
-function search() {
-  var display = document.getElementById("result").style.display;
-  document.getElementById("result").style.display = 'block';
+function openNewTab(brand, model, year){
+  var url = "https://www.google.com/search?q=" + brand + "+" + model + "+" + year + "&hl=pt_br&site=imghp&tbm=isch"
+  window.open(url, '', 'width=700,height=500')
 }
 
 function renderPrice(data){
@@ -208,14 +210,40 @@ function renderPrice(data){
   fuel_type = data['Combustivel']
   fipe_code = data['CodigoFipe']
   month_reference = data['MesReferencia']
-  list += `<h3>Marca: ${brand}</h3>`
-  list += `<h3>Modelo: ${model}</h3>`
-  list += `<h3>Ano: ${year}</h3>`
-  list += `<h3>Combustível: ${fuel_type}</h3>`
-  list += `<h3>Código FIPE: ${fipe_code}</h3>`
-  list += `<h3>Mês de referência: ${month_reference}</h3>`
-  list += `<h3>Preço: ${price}</h3>`
+  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark">
+  <tbody>
+    <tr>
+      <th scope="row">Marca</th>
+      <td>${brand}</td>
+    </tr>
+    <tr>
+      <th scope="row">Modelo</th>
+      <td>${model}</td>
+    </tr>
+    <tr>
+      <th scope="row">Ano</th>
+      <td>${year}</td>
+    </tr>
+    <tr>
+      <th scope="row">Preço médio</th>
+      <td>${price}</td>
+    </tr>
+    <tr>
+      <th scope="row">Combustível</th>
+      <td>${fuel_type}</td>
+    </tr>
+    <tr>
+      <th scope="row">Código FIPE</th>
+      <td>${fipe_code}</td>
+    </tr>
+    <tr>
+      <th scope="row">Mês de referência</th>
+      <td>${month_reference}</td>
+    </tr>
+  </tbody>
+</table>`
   result_div.innerHTML += list;
+  openNewTab(brand, model, year, price)
 }
 
 async function getAllYearsPrices(data){
