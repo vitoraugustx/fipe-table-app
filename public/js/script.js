@@ -1,4 +1,3 @@
-const WEARABLE_URL = "https://api-wearable.herokuapp.com/events"
 const FIPE_URL = "https://parallelum.com.br/fipe/api"
 const type_form = document.getElementById('form-vehicle-type');
 const brand_form = document.getElementById('form-vehicle-brand');
@@ -103,23 +102,34 @@ async function getYears(){
   if (value == "car"){
     const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
+    // Tratamento para o código 32000-1 (errado)
+    for (let i = 0; i < data.length; i++){
+      if (data[i].codigo == '32000-1'){
+        data.splice(i, 1)
+      }
+    }
     setDataToYearForm(data)
   } else if (value == "motorcycle"){
     const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
+    // Tratamento para o código 32000-1 (errado)
+    for (let i = 0; i < data.length; i++){
+      if (data[i].codigo == '32000-1'){
+        data.splice(i, 1)
+      }
+    }
     setDataToYearForm(data)
   } else if (value == "truck"){
     const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
+    for (let i = 0; i < data.length; i++){
+      if (data[i].codigo == '32000-1'){
+        data.splice(i, 1)
+      }
+    }
     setDataToYearForm(data)
   } else {
     console.log("error")
-  }
-  // Tratamento para o código 32000-1 (errado)
-  for (let i = 0; i < data.length; i++){
-    if (data[i].codigo == '32000-1'){
-      data.splice(i, 1)
-    }
   }
   let year_price = await getAllYearsPrices(data)
   plotGraph(year_price)
@@ -152,7 +162,7 @@ function plotGraph(year_price){
     yaxis: {
       title: 'Preço (R$)',
       range: [Math.min(price_array), Math.max(price_array)],
-      tickformat: '$,.'
+      tickprefix: 'R$',
     }
   };
   // Display the plot
@@ -209,18 +219,20 @@ async function getAllYearsPrices(data){
   let year_price = []
   for(let i = 0; i < data.length; i++){
     year_array.push(data[i].nome.slice(0,4))
-    year_array.sort()
     aux_price_array.push(await getPrice(data[i].codigo))
   }
+  // Retira os valores que não são numéricos
   for (let i = 0; i < aux_price_array.length; i++){
-    // Transforma o preço em float
     price_array.push(aux_price_array[i].replace('R$ ','').replaceAll('.','').replaceAll(',','.'))
-    //price_array.push(aux_price_array[i])
   }
-  price_array.sort()
+  // Convertendo para float
+  price_array = price_array.map(parseFloat)
+  // Cria um array de objetos com o ano e o preço
   for (let i = 0; i < year_array.length; i++){
     year_price = year_price.concat({year: year_array[i], price: price_array[i]})
   }
+  // Ordena o array de acordo com o ano
+  year_price.sort((a, b) => parseFloat(a.year) - parseFloat(b.year));
   return year_price
 } 
 
