@@ -137,7 +137,6 @@ async function getYears(){
 }
 
 function plotGraph(year_price){
-  var ctx = document.getElementById('plot')
   var year_array = []
   var price_array = []
   for (let i = 0; i < year_price.length; i++){

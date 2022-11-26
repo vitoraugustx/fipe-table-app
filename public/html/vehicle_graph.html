@@ -24,8 +24,8 @@
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="index.html">Home</a>
-                  <a class="nav-link active" href="vehicle_search.html">Pesquisar veículo</a>
-                  <a class="nav-link" href="vehicle_graph.html">Plotar gráfico de preços do veículo de acordo com o ano</a>
+                  <a class="nav-link" href="vehicle_search.html">Pesquisar veículo</a>
+                  <a class="nav-link active" href="vehicle_graph.html">Plotar gráfico de preços do veículo de acordo com o ano</a>
                 </div>
               </div>
             </div>
@@ -63,17 +63,12 @@
                     </select>
                     <br>
                     <h6 class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears()">
+                    <select id ="form-vehicle-model">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
                     <br>
-                    <h6 class="fw-medium">Ano</h6>
-                    <select id ="form-vehicle-year">
-                        <option value="0">Selecione o ano do veículo</option>
-                    </select>
                     <br>
-                    <br>
-                    <button type="button" class="btn btn-outline-success" onclick="getVehiclePrice()">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="getYears()">Pesquisar</button>
                     <br>
                     <br>
                     <div id="result"></div>
