@@ -18,7 +18,7 @@
     <body>
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-              <a class="navbar-brand">FIPE App</a>
+              <a class="navbar-brand" href="/">FIPE App</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -26,7 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link active" href="/search">Pesquisar veículo</a>
-                  <a class="nav-link" href="/graph">Preço do modelo em relação ao ano</a>
+                  <a class="nav-link" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
                     </select>
                     <br>
                     <h6 class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears()">
+                    <select id ="form-vehicle-model" onchange="getYears(1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
                     <br>
