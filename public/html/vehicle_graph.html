@@ -18,7 +18,7 @@
     <body>
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
-              <a class="navbar-brand">FIPE App</a>
+              <a class="navbar-brand" href="/">FIPE App</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -26,7 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/search">Pesquisar veículo</a>
-                  <a class="nav-link active" href="/graph">Preço do modelo em relação ao ano</a>
+                  <a class="nav-link active" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                     <h2 class="fw-light">Preço do modelo em relação ao ano</h2>
                     <br>
                     <br>
-                    <p id="search-info" class="fw-medium">Nesta seção é possível ver um comparativo de preços de um modelo em relação ao seu ano de fabricação, através de um gráfico. Assim como na pesquisa padrão, deve-se selecionar a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>.</p>
+                    <p id="search-info" class="fw-medium">Nesta seção, é possível ver um comparativo de preços de um modelo em relação ao seu ano de fabricação através de um gráfico. Assim como na pesquisa padrão, deve-se selecionar a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b> e <b>modelo</b>.</p>
                 </div>
                 <div class="col"></div>
             </div>
@@ -72,8 +72,7 @@
                     <button type="button" class="btn btn-outline-success" onclick="search(2)">Pesquisar</button>
                     <br>
                     <br>
-                    <div id="result"></div>
-                    <div id="plot" style="width:100%;max-width:900px"></div>
+                    <div id="plot" style="width:100%"></div>
                 </div>
                 <div class="col"></div>
             </div>

@@ -94,7 +94,7 @@ async function getModels(){
   }
 }
 
-async function getYears(){
+async function getYears(type){
   var value = type_form.options[type_form.selectedIndex].value;
   var model_number = model_form.options[model_form.selectedIndex].id;
   var brand_number = model_form.options[model_form.selectedIndex].value;  
@@ -109,7 +109,9 @@ async function getYears(){
         data.splice(i, 1)
       }
     }
-    setDataToYearForm(data)
+    if (type == 1){
+      setDataToYearForm(data)
+    }
   } else if (value == "motorcycle"){
     const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
@@ -119,21 +121,28 @@ async function getYears(){
         data.splice(i, 1)
       }
     }
-    setDataToYearForm(data)
+    if (type == 1){
+      setDataToYearForm(data)
+    }
   } else if (value == "truck"){
     const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
     data = await response.json()
     for (let i = 0; i < data.length; i++){
+      // Tratamento para o código 32000-1 (errado)
       if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
         data.splice(i, 1)
       }
     }
-    setDataToYearForm(data)
+    if (type == 1){
+      setDataToYearForm(data)
+    }
   } else {
     console.log("error")
   }
-  let year_price = await getAllYearsPrices(data)
-  //plotGraph(year_price)
+  if (type == 2){
+    let year_price = await getAllYearsPrices(data)
+    plotGraph(year_price)
+  }
 }
 
 function plotGraph(year_price){
@@ -149,13 +158,14 @@ function plotGraph(year_price){
     x: year_array,
     y: price_array,
     mode: 'lines+markers',
-    type: 'scatter'
+    type: 'bar',
+    marker: {color: 'rgb(55, 83, 109)'}
   }];
   // Define the plot layout
   var layout = {
-    title: 'Preço do veículo ao longo dos anos',
+    title: 'Preço do modelo de acordo com o ano de fabricação',
     xaxis: {
-      title: 'Ano',
+      title: 'Ano do modelo',
       range: [Math.min(year_array), Math.max(year_array)],
       autotick: false
     },
@@ -167,7 +177,7 @@ function plotGraph(year_price){
   };
   // Display the plot
   Plotly.newPlot('plot', data, layout);
-  
+  window.location.href='#plot';
 }
 
 function search(type){
@@ -176,10 +186,6 @@ function search(type){
     var brand_number = brand_form.options[brand_form.selectedIndex].value;
     var model_number = model_form.options[model_form.selectedIndex].value;
     var year_number = year_form.options[year_form.selectedIndex].value;
-    console.log(type_number)
-    console.log(brand_number)
-    console.log(model_number)
-    console.log(year_number)
     if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
       alert("Selecione todos os campos para realizar a busca")
     } else {
@@ -192,7 +198,7 @@ function search(type){
     if (type_number == "0" || brand_number == "0" || model_number == "0"){
       alert("Selecione todos os campos para realizar a busca")
     } else {
-      getVehiclePrice()
+      getYears(2)
     }
   }
 }
