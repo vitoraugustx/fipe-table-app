@@ -170,6 +170,33 @@ function plotGraph(year_price){
   
 }
 
+function search(type){
+  if (type == 1){
+    var type_number = type_form.options[type_form.selectedIndex].value;
+    var brand_number = brand_form.options[brand_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].value;
+    var year_number = year_form.options[year_form.selectedIndex].value;
+    console.log(type_number)
+    console.log(brand_number)
+    console.log(model_number)
+    console.log(year_number)
+    if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
+      alert("Selecione todos os campos para realizar a busca")
+    } else {
+      getVehiclePrice()
+    }
+  } else if (type == 2){
+    var type_number = type_form.options[type_form.selectedIndex].value;
+    var brand_number = brand_form.options[brand_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].value;
+    if (type_number == "0" || brand_number == "0" || model_number == "0"){
+      alert("Selecione todos os campos para realizar a busca")
+    } else {
+      getVehiclePrice()
+    }
+  }
+}
+
 async function getVehiclePrice(){
   var value = type_form.options[type_form.selectedIndex].value;
   var model_number = model_form.options[model_form.selectedIndex].id;
@@ -209,7 +236,7 @@ function renderPrice(data){
   fuel_type = data['Combustivel']
   fipe_code = data['CodigoFipe']
   month_reference = data['MesReferencia']
-  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark">
+  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
   <tbody>
     <tr>
       <th scope="row">Marca</th>
