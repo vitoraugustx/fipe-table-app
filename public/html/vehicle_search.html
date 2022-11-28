@@ -26,7 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link active" href="/search">Pesquisar veículo</a>
-                  <a class="nav-link" href="/graph">Plotar gráfico de preços do veículo de acordo com o ano</a>
+                  <a class="nav-link" href="/graph">Preço do modelo em relação ao ano</a>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                     <h2 class="fw-light">Pesquisar veículos</h2>
                     <br>
                     <br>
-                    <p id="search-info" class="fw-medium">Para realizar a pesquisa, selecione primeiramente a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>. Como resultado da pesquisa são obtidas informções como combustível, preço médio e código FIPE do veículo.</p>
+                    <p id="search-info" class="fw-medium">Para realizar a pesquisa, selecione primeiramente a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>. Como resultado da pesquisa são obtidas informações como combustível, preço médio e código FIPE do veículo.</p>
                 </div>
                 <div class="col"></div>
             </div>
@@ -74,7 +74,7 @@
                     </select>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-outline-success" onclick="getVehiclePrice()">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="search(1)">Pesquisar</button>
                     <br>
                     <br>
                     <div id="result"></div>

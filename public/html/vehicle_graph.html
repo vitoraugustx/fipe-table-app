@@ -26,7 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link" href="/search">Pesquisar veículo</a>
-                  <a class="nav-link active" href="/graph">Plotar gráfico de preços do veículo de acordo com o ano</a>
+                  <a class="nav-link active" href="/graph">Preço do modelo em relação ao ano</a>
                 </div>
               </div>
             </div>
@@ -37,10 +37,10 @@
                 <div class="col-8">
                     <br>
                     <br>
-                    <h2 class="fw-light">Pesquisar veículos</h2>
+                    <h2 class="fw-light">Preço do modelo em relação ao ano</h2>
                     <br>
                     <br>
-                    <p id="search-info" class="fw-medium">Para realizar a pesquisa, selecione primeiramente a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>. Como resultado da pesquisa são obtidas informções como combustível, preço médio e código FIPE do veículo.</p>
+                    <p id="search-info" class="fw-medium">Nesta seção é possível ver um comparativo de preços de um modelo em relação ao seu ano de fabricação, através de um gráfico. Assim como na pesquisa padrão, deve-se selecionar a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>.</p>
                 </div>
                 <div class="col"></div>
             </div>
@@ -69,7 +69,7 @@
                     </select>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-outline-success" onclick="getYears()">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="search(2)">Pesquisar</button>
                     <br>
                     <br>
                     <div id="result"></div>
