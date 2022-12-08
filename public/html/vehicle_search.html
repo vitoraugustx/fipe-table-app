@@ -26,6 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link active" href="/search">Pesquisar veículo</a>
+                  <a class="nav-link" href="/compare">Comparar veículos</a>
                   <a class="nav-link" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
                 </div>
               </div>
@@ -34,13 +35,13 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col"></div> 
-                <div class="col-8">
+                <div class="col-10">
                     <br>
                     <br>
                     <h2 class="fw-light">Pesquisar veículos</h2>
                     <br>
                     <br>
-                    <p id="search-info" class="fw-medium">Para realizar a pesquisa, selecione primeiramente a categoria do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>. Como resultado da pesquisa são obtidas informações como combustível, preço médio e código FIPE do veículo.</p>
+                    <p id="search-info" class="fw-medium">Para realizar a pesquisa, selecione primeiramente a <b>categoria</b> do veículo (carros e utilitários, motos, ou caminhões e ônibus). Logo após, selecione sua respectiva <b>marca</b>, <b>modelo</b> e <b>ano</b>. Como resultado da pesquisa são obtidas informações como combustível, preço médio e código FIPE do veículo.</p>
                 </div>
                 <div class="col"></div>
             </div>
@@ -50,31 +51,28 @@
             <div class="row">
                 <div class="col"></div> 
                 <div class="col-6">
-                    <h6 class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
-                        <option value="0">Selecione a categoria do veículos</option>
+                    <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
+                    <select id = "form-vehicle-type" onchange="getVehicle(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'))">
+                        <option value="0">Selecione a categoria do veículo</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
-                    </select>
-                    <br>    
-                    <h6 class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
+                    </select>    
+                    <h6 id="form-title" class="fw-medium">Marca</h6>
+                    <select id ="form-vehicle-brand" onchange="getModels(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'))">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
-                    <br>
-                    <h6 class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears(1)">
+                    <h6 id="form-title" class="fw-medium">Modelo</h6>
+                    <select id ="form-vehicle-model" onchange="getYears(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'), 1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
-                    <br>
-                    <h6 class="fw-medium">Ano</h6>
+                    <h6 id="form-title" class="fw-medium">Ano</h6>
                     <select id ="form-vehicle-year">
                         <option value="0">Selecione o ano do veículo</option>
                     </select>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-outline-success" onclick="search(1)">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="search(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'), document.getElementById('result'), 1)">Pesquisar</button>
                     <br>
                     <br>
                     <div id="result"></div>

@@ -31,6 +31,10 @@ app.get('/graph', (req, res) =>{
     res.sendFile(__dirname + '/public/html/vehicle_graph.html');     
 });
 
+app.get('/compare', (req, res) =>{
+    res.sendFile(__dirname + '/public/html/vehicle_compare.html');     
+});
+
 app.listen(port, () => {
     console.log(`Servidor rodando no endereco http://localhost:${port}`);
 });
