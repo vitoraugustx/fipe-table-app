@@ -1,324 +1,309 @@
 const FIPE_URL = "https://parallelum.com.br/fipe/api"
-const type_form = document.getElementById('form-vehicle-type');
-const brand_form = document.getElementById('form-vehicle-brand');
-const model_form = document.getElementById('form-vehicle-model');
-const year_form = document.getElementById('form-vehicle-year');
-const result_div = document.getElementById('result');
 
-async function getVehicle(){
-  var value = type_form.options[type_form.selectedIndex].value;
-  if (value == "car"){
-    let response = await fetch(FIPE_URL + "/v1/carros/marcas")
-    let data = await response.json()
-    setDataToBrandForm(data, value)
+async function getVehicle(type_form, brand_form){
+    type_form_value = type_form.value;
+    let data
+    if (type_form_value == "car"){
+      let response = await fetch(FIPE_URL + "/v1/carros/marcas")
+      data = await response.json()
+  
+    } else if (type_form_value == "motorcycle"){
+      let response = await fetch(FIPE_URL + "/v1/motos/marcas")
+      data = await response.json()
+  
+    } else if (type_form_value == "truck"){
+      let response = await fetch(FIPE_URL + "/v1/caminhoes/marcas")
+      data = await response.json()
+  
+    } else { 
+      return console.log("error")
+    }
 
-  } else if (value == "motorcycle"){
-    let response = await fetch(FIPE_URL + "/v1/motos/marcas")
-    let data = await response.json()
-    setDataToBrandForm(data, value)
-
-  } else if (value == "truck"){
-    let response = await fetch(FIPE_URL + "/v1/caminhoes/marcas")
-    let data = await response.json()
-    setDataToBrandForm(data, value)
-
-  } else { 
-    console.log("error")
-  }
-  // TODO: RESET MODEL FORM, YEAR FORM
+    setDataToBrandForm(data, brand_form)
+    
+    // TODO: RESET MODEL FORM, YEAR FORM
 }
 
-function setDataToBrandForm(data, value){
-  brand_form.innerHTML = '';
-  let list = '';
-  if (data.length <= 0){
-    list += `<h3>Nenhuma marca de veículo disponível</h3>`
-  } else {
-    list += `<option value="0">Selecione a marca do veículo</option>`
-    for(let i = 0; i < data.length; i++){
-      list += `<option id="${data[i].codigo}">${data[i].nome}</option>`
-    }
-  }
-  brand_form.innerHTML += list;
-}
-
-function setDataToModelForm(json, brand_number){
-  data = json['modelos']
-  model_form.innerHTML = '';
-  let list = '';
-  if (data.length <= 0){
-    list += `<h3>Nenhum modelo de veículo disponível</h3>`
-  } else {
-    list += `<option value="0">Selecione o modelo do veículo</option>`
-    for(let i = 0; i < data.length; i++){
-      list += `<option value="${brand_number}" id="${data[i].codigo}">${data[i].nome}</option>`
-    }
-  }
-  model_form.innerHTML += list;
-}
-
-function setDataToYearForm(data){
-  year_form.innerHTML = '';
-  let list = '';
-  if (data.length <= 0){
-    list += `<h3>Nenhum ano de veículo disponível</h3>`
-  } else {
-    list += `<option value="0">Selecione o ano do veículo</option>`
-    for(let i = 0; i < data.length; i++){
-      list += `<option id="${data[i].codigo}">${data[i].nome}</option>`
-    }
-  }
-  year_form.innerHTML += list;
-}
-
-async function getModels(){
-  var brand_number = brand_form.options[brand_form.selectedIndex].id;
-  var value = type_form.options[type_form.selectedIndex].value;
-  if (value == "car"){
-    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos")
-    const data = await response.json()
-    setDataToModelForm(data, brand_number)
-
-  } else if (value == "motorcycle"){
-    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos")
-    const data = await response.json()
-    setDataToModelForm(data, brand_number)
-
-  } else if (value == "truck"){
-    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos")
-    const data = await response.json()
-    setDataToModelForm(data, brand_number)
-
-  } else {
-    console.log("error")
-  }
-}
-
-async function getYears(type){
-  var value = type_form.options[type_form.selectedIndex].value;
-  var model_number = model_form.options[model_form.selectedIndex].id;
-  var brand_number = model_form.options[model_form.selectedIndex].value;  
-  let data
-  if (value == "car"){
-    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-    data = await response.json()
-    console.log(data)
-    // Tratamento para o código 32000-1 (errado)
-    for (let i = 0; i < data.length; i++){
-      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
-        data.splice(i, 1)
-      }
-    }
-    if (type == 1){
-      setDataToYearForm(data)
-    }
-  } else if (value == "motorcycle"){
-    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-    data = await response.json()
-    // Tratamento para o código 32000-1 (errado)
-    for (let i = 0; i < data.length; i++){
-      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
-        data.splice(i, 1)
-      }
-    }
-    if (type == 1){
-      setDataToYearForm(data)
-    }
-  } else if (value == "truck"){
-    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-    data = await response.json()
-    for (let i = 0; i < data.length; i++){
-      // Tratamento para o código 32000-1 (errado)
-      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
-        data.splice(i, 1)
-      }
-    }
-    if (type == 1){
-      setDataToYearForm(data)
-    }
-  } else {
-    console.log("error")
-  }
-  if (type == 2){
-    let year_price = await getAllYearsPrices(data)
-    plotGraph(year_price)
-  }
-}
-
-function plotGraph(year_price){
-  var year_array = []
-  var price_array = []
-  for (let i = 0; i < year_price.length; i++){
-    year_array.push(year_price[i]['year'])
-    price_array.push(year_price[i]['price'])
-  }
-
-  // Define the data
-  var data = [{
-    x: year_array,
-    y: price_array,
-    mode: 'lines+markers',
-    type: 'bar',
-    marker: {color: 'rgb(55, 83, 109)'}
-  }];
-  // Define the plot layout
-  var layout = {
-    title: 'Preço do modelo de acordo com o ano de fabricação',
-    xaxis: {
-      title: 'Ano do modelo',
-      range: [Math.min(year_array), Math.max(year_array)],
-      autotick: false
-    },
-    yaxis: {
-      title: 'Preço (R$)',
-      range: [Math.min(price_array), Math.max(price_array)],
-      tickprefix: 'R$',
-    }
-  };
-  // Display the plot
-  Plotly.newPlot('plot', data, layout);
-  window.location.href='#plot';
-}
-
-function search(type){
-  if (type == 1){
-    var type_number = type_form.options[type_form.selectedIndex].value;
-    var brand_number = brand_form.options[brand_form.selectedIndex].value;
-    var model_number = model_form.options[model_form.selectedIndex].value;
-    var year_number = year_form.options[year_form.selectedIndex].value;
-    if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
-      alert("Selecione todos os campos para realizar a busca")
+function setDataToBrandForm(data, brand_form){
+    brand_form.innerHTML = '';
+    let list = '';
+    if (data.length <= 0){
+      list += `<h3>Nenhuma marca de veículo disponível</h3>`
     } else {
-      getVehiclePrice()
+      list += `<option value="0">Selecione a marca do veículo</option>`
+      for(let i = 0; i < data.length; i++){
+        list += `<option id="${data[i].codigo}">${data[i].nome}</option>`
+      }
     }
-  } else if (type == 2){
-    var type_number = type_form.options[type_form.selectedIndex].value;
-    var brand_number = brand_form.options[brand_form.selectedIndex].value;
-    var model_number = model_form.options[model_form.selectedIndex].value;
-    if (type_number == "0" || brand_number == "0" || model_number == "0"){
-      alert("Selecione todos os campos para realizar a busca")
-    } else {
-      getYears(2)
-    }
-  }
+    brand_form.innerHTML += list;
 }
 
-async function getVehiclePrice(){
-  var value = type_form.options[type_form.selectedIndex].value;
-  var model_number = model_form.options[model_form.selectedIndex].id;
-  var brand_number = model_form.options[model_form.selectedIndex].value;
-  var year_number = year_form.options[year_form.selectedIndex].id;
-  if (value == "car"){
-    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    renderPrice(data)
-  } else if (value == "motorcycle"){
-    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    renderPrice(data)
-  } else if (value == "truck"){
-    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    renderPrice(data)
-  } else {
-    console.log("error")
-  }
-  document.getElementById("result").style.display = 'block';
-  window.location.href='#result';
+async function getModels(type_form, brand_form, model_form){
+    var type_form_value = type_form.options[type_form.selectedIndex].value;
+    var brand_number = brand_form.options[brand_form.selectedIndex].id;
+    let data
+    if (type_form_value == "car"){
+      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos")
+      data = await response.json()
+  
+    } else if (type_form_value == "motorcycle"){
+      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos")
+      data = await response.json()
+  
+    } else if (type_form_value == "truck"){
+      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos")
+      data = await response.json()
+  
+    } else {
+      return console.log("error")
+    }
+
+    setDataToModelForm(data, brand_number, model_form)
+
+}
+
+function setDataToModelForm(json, brand_number, model_form){
+    data = json['modelos']
+    model_form.innerHTML = '';
+    let list = '';
+    if (data.length <= 0){
+      list += `<h3>Nenhum modelo de veículo disponível</h3>`
+    } else {
+      list += `<option value="0">Selecione o modelo do veículo</option>`
+      for(let i = 0; i < data.length; i++){
+        list += `<option value="${brand_number}" id="${data[i].codigo}">${data[i].nome}</option>`
+      }
+    }
+    model_form.innerHTML += list;
+}
+
+async function getYears(type_form, model_form, year_form, type){
+    var value = type_form.options[type_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].id;
+    var brand_number = model_form.options[model_form.selectedIndex].value;  
+    let data
+    if (value == "car"){
+      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+      data = await response.json()
+      
+    } else if (value == "motorcycle"){
+      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+      data = await response.json()
+
+    } else if (value == "truck"){
+      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+      data = await response.json()
+
+    } else {
+      return console.log("error")
+    }
+
+    // Tratamento para o código 32000-X (errado)
+    for (let i = 0; i < data.length; i++){
+        if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
+            data.splice(i, 1)
+        }
+    }
+
+    if (type == 1){
+        setDataToYearForm(data, year_form)
+    } else if (type == 2){
+      let year_price = await getAllYearsPrices(data, type_form, model_form)
+      plotGraph(year_price)
+    }
+}
+
+function setDataToYearForm(data, year_form){
+    year_form.innerHTML = '';
+    let list = '';
+    if (data.length <= 0){
+      list += `<h3>Nenhum ano de veículo disponível</h3>`
+    } else {
+      list += `<option value="0">Selecione o ano do veículo</option>`
+      for(let i = 0; i < data.length; i++){
+        list += `<option id="${data[i].codigo}">${data[i].nome}</option>`
+      }
+    }
+    year_form.innerHTML += list;
+}
+
+function search(type_form, brand_form, model_form, year_form, result_div, type){
+    if (type == 1){
+      var type_number = type_form.options[type_form.selectedIndex].value;
+      var brand_number = brand_form.options[brand_form.selectedIndex].value;
+      var model_number = model_form.options[model_form.selectedIndex].value;
+      var year_number = year_form.options[year_form.selectedIndex].value;
+      if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
+        return alert("Selecione todos os campos para realizar a busca")
+      } else {
+        getVehiclePrice(type_form, model_form, year_form, result_div)
+      }
+    } else if (type == 2){
+      var type_number = type_form.options[type_form.selectedIndex].value;
+      var brand_number = brand_form.options[brand_form.selectedIndex].value;
+      var model_number = model_form.options[model_form.selectedIndex].value;
+      if (type_number == "0" || brand_number == "0" || model_number == "0"){
+        return alert("Selecione todos os campos para realizar a busca")
+      } else {
+        getYears(type_form, model_form, undefined, 2)
+      }
+    }
+}
+
+async function getVehiclePrice(type_form, model_form, year_form, result_div){
+    var value = type_form.options[type_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].id;
+    var brand_number = model_form.options[model_form.selectedIndex].value;
+    var year_number = year_form.options[year_form.selectedIndex].id;
+    let data
+    if (value == "car"){
+      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      data = await response.json()
+
+    } else if (value == "motorcycle"){
+      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      data = await response.json()
+
+    } else if (value == "truck"){
+      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      data = await response.json()
+
+    } else {
+      return console.log("error")
+    }
+    renderPrice(data, result_div)
+    document.getElementById("result").style.display = 'block';
+    window.location.href='#result';
+}
+
+function renderPrice(data, result_div){
+    result_div.innerHTML = '';
+    let list = '';
+    price = data['Valor']
+    brand = data['Marca']
+    model = data['Modelo']
+    year = data['AnoModelo']
+    fuel_type = data['Combustivel']
+    fipe_code = data['CodigoFipe']
+    month_reference = data['MesReferencia']
+    list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
+    <tbody>
+      <tr>
+        <th scope="row">Marca</th>
+        <td>${brand}</td>
+      </tr>
+      <tr>
+        <th scope="row">Modelo</th>
+        <td>${model}</td>
+      </tr>
+      <tr>
+        <th scope="row">Ano</th>
+        <td>${year}</td>
+      </tr>
+      <tr>
+        <th scope="row">Preço médio</th>
+        <td>${price}</td>
+      </tr>
+      <tr>
+        <th scope="row">Combustível</th>
+        <td>${fuel_type}</td>
+      </tr>
+      <tr>
+        <th scope="row">Código FIPE</th>
+        <td>${fipe_code}</td>
+      </tr>
+      <tr>
+        <th scope="row">Mês de referência</th>
+        <td>${month_reference}</td>
+      </tr>
+    </tbody>
+  </table>`
+    result_div.innerHTML += list;
+    openNewTab(brand, model, year, price)
 }
 
 function openNewTab(brand, model, year){
-  var url = "https://www.google.com/search?q=" + brand + "+" + model + "+" + year + "&hl=pt_br&site=imghp&tbm=isch"
-  window.open(url, '', 'width=700,height=500')
+    var url = "https://www.google.com/search?q=" + brand + "+" + model + "+" + year + "&hl=pt_br&site=imghp&tbm=isch"
+    window.open(url, '', 'width=700,height=500')
 }
 
-function renderPrice(data){
-  result_div.innerHTML = '';
-  let list = '';
-  price = data['Valor']
-  brand = data['Marca']
-  model = data['Modelo']
-  year = data['AnoModelo']
-  fuel_type = data['Combustivel']
-  fipe_code = data['CodigoFipe']
-  month_reference = data['MesReferencia']
-  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
-  <tbody>
-    <tr>
-      <th scope="row">Marca</th>
-      <td>${brand}</td>
-    </tr>
-    <tr>
-      <th scope="row">Modelo</th>
-      <td>${model}</td>
-    </tr>
-    <tr>
-      <th scope="row">Ano</th>
-      <td>${year}</td>
-    </tr>
-    <tr>
-      <th scope="row">Preço médio</th>
-      <td>${price}</td>
-    </tr>
-    <tr>
-      <th scope="row">Combustível</th>
-      <td>${fuel_type}</td>
-    </tr>
-    <tr>
-      <th scope="row">Código FIPE</th>
-      <td>${fipe_code}</td>
-    </tr>
-    <tr>
-      <th scope="row">Mês de referência</th>
-      <td>${month_reference}</td>
-    </tr>
-  </tbody>
-</table>`
-  result_div.innerHTML += list;
-  openNewTab(brand, model, year, price)
-}
-
-async function getAllYearsPrices(data){
-  let year_array = []
-  let aux_price_array = []
-  let price_array = []
-  let year_price = []
-  for(let i = 0; i < data.length; i++){
-    year_array.push(data[i].nome.slice(0,4))
-    aux_price_array.push(await getPrice(data[i].codigo))
-  }
-  // Retira os valores que não são numéricos
-  for (let i = 0; i < aux_price_array.length; i++){
-    price_array.push(aux_price_array[i].replace('R$ ','').replaceAll('.','').replaceAll(',','.'))
-  }
-  // Convertendo para float
-  price_array = price_array.map(parseFloat)
-  // Cria um array de objetos com o ano e o preço
-  for (let i = 0; i < year_array.length; i++){
-    year_price = year_price.concat({year: year_array[i], price: price_array[i]})
-  }
-  // Ordena o array de acordo com o ano
-  year_price.sort((a, b) => parseFloat(a.year) - parseFloat(b.year));
-  return year_price
+async function getAllYearsPrices(data, type_form, model_form){
+    let year_array = []
+    let aux_price_array = []
+    let price_array = []
+    let year_price = []
+    for(let i = 0; i < data.length; i++){
+      year_array.push(data[i].nome.slice(0,4))
+      aux_price_array.push(await getPrice(data[i].codigo, type_form, model_form))
+    }
+    // Retira os valores que não são numéricos
+    for (let i = 0; i < aux_price_array.length; i++){
+      price_array.push(aux_price_array[i].replace('R$ ','').replaceAll('.','').replaceAll(',','.'))
+    }
+    // Convertendo para float
+    price_array = price_array.map(parseFloat)
+    // Cria um array de objetos com o ano e o preço
+    for (let i = 0; i < year_array.length; i++){
+      year_price = year_price.concat({year: year_array[i], price: price_array[i]})
+    }
+    // Ordena o array de acordo com o ano
+    year_price.sort((a, b) => parseFloat(a.year) - parseFloat(b.year));
+    return year_price
 } 
 
-async function getPrice(year_number){
-  var value = type_form.options[type_form.selectedIndex].value;
-  var model_number = model_form.options[model_form.selectedIndex].id;
-  var brand_number = model_form.options[model_form.selectedIndex].value;
-  if (value == "car"){
-    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    return data['Valor']
-  } else if (value == "motorcycle"){
-    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    return data['Valor']
-  } else if (value == "truck"){
-    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-    const data = await response.json()
-    return data['Valor']
-  } else {
-    console.log("error")
-  }
+function plotGraph(year_price){
+    var year_array = []
+    var price_array = []
+    for (let i = 0; i < year_price.length; i++){
+      year_array.push(year_price[i]['year'])
+      price_array.push(year_price[i]['price'])
+    }
+  
+    // Define the data
+    var data = [{
+      x: year_array,
+      y: price_array,
+      mode: 'lines+markers',
+      type: 'bar',
+      marker: {color: 'rgb(55, 83, 109)'}
+    }];
+    // Define the plot layout
+    var layout = {
+      title: 'Preço do modelo de acordo com o ano de fabricação',
+      xaxis: {
+        title: 'Ano do modelo',
+        range: [Math.min(year_array), Math.max(year_array)],
+        autotick: false
+      },
+      yaxis: {
+        title: 'Preço (R$)',
+        range: [Math.min(price_array), Math.max(price_array)],
+        tickprefix: 'R$',
+      }
+    };
+    // Display the plot
+    Plotly.newPlot('plot', data, layout);
+    window.location.href='#plot';
 }
+
+async function getPrice(year_number, type_form, model_form){
+    var value = type_form.options[type_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].id;
+    var brand_number = model_form.options[model_form.selectedIndex].value;
+    if (value == "car"){
+      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      const data = await response.json()
+      return data['Valor']
+    } else if (value == "motorcycle"){
+      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      const data = await response.json()
+      return data['Valor']
+    } else if (value == "truck"){
+      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+      const data = await response.json()
+      return data['Valor']
+    } else {
+      console.log("error")
+    }
+}
+

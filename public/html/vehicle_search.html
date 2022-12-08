@@ -52,18 +52,18 @@
                 <div class="col"></div> 
                 <div class="col-6">
                     <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
+                    <select id = "form-vehicle-type" onchange="getVehicle(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'))">
                         <option value="0">Selecione a categoria do veículo</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
                     </select>    
                     <h6 id="form-title" class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
+                    <select id ="form-vehicle-brand" onchange="getModels(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'))">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears(1)">
+                    <select id ="form-vehicle-model" onchange="getYears(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'), 1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Ano</h6>
@@ -72,7 +72,7 @@
                     </select>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-outline-success" onclick="search(1)">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="search(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'), document.getElementById('result'), 1)">Pesquisar</button>
                     <br>
                     <br>
                     <div id="result"></div>

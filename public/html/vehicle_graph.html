@@ -52,14 +52,14 @@
                 <div class="col"></div> 
                 <div class="col-6">
                     <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
+                    <select id = "form-vehicle-type" onchange="getVehicle(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'))">
                         <option value="0">Selecione a categoria do veículos</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
                     </select>   
                     <h6 id="form-title" class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
+                    <select id ="form-vehicle-brand" onchange="getModels(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'))">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Modelo</h6>
@@ -68,7 +68,7 @@
                     </select>
                     <br>
                     <br>
-                    <button type="button" class="btn btn-outline-success" onclick="search(2)">Pesquisar</button>
+                    <button type="button" class="btn btn-outline-success" onclick="search(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'), undefined, undefined, 2)">Pesquisar</button>
                     <br>
                     <br>
                     <div id="plot" style="width:100%"></div>
