@@ -26,6 +26,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link" aria-current="page" href="/">Home</a>
                   <a class="nav-link active" href="/search">Pesquisar veículo</a>
+                  <a class="nav-link" href="/compare">Comparar veículos</a>
                   <a class="nav-link" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
                 </div>
               </div>
@@ -34,7 +35,7 @@
         <div class="container text-center">
             <div class="row">
                 <div class="col"></div> 
-                <div class="col-8">
+                <div class="col-10">
                     <br>
                     <br>
                     <h2 class="fw-light">Pesquisar veículos</h2>
@@ -50,25 +51,22 @@
             <div class="row">
                 <div class="col"></div> 
                 <div class="col-6">
-                    <h6 class="fw-medium">Categoria</h6>
+                    <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
                     <select id = "form-vehicle-type" onchange="getVehicle()">
-                        <option value="0">Selecione a categoria do veículos</option>
+                        <option value="0">Selecione a categoria do veículo</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
-                    </select>
-                    <br>    
-                    <h6 class="fw-medium">Marca</h6>
+                    </select>    
+                    <h6 id="form-title" class="fw-medium">Marca</h6>
                     <select id ="form-vehicle-brand" onchange="getModels()">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
-                    <br>
-                    <h6 class="fw-medium">Modelo</h6>
+                    <h6 id="form-title" class="fw-medium">Modelo</h6>
                     <select id ="form-vehicle-model" onchange="getYears(1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
-                    <br>
-                    <h6 class="fw-medium">Ano</h6>
+                    <h6 id="form-title" class="fw-medium">Ano</h6>
                     <select id ="form-vehicle-year">
                         <option value="0">Selecione o ano do veículo</option>
                     </select>
