@@ -150,7 +150,7 @@ function search(type_form, brand_form, model_form, year_form, result_div, type){
     }
 }
 
-async function getVehiclePrice(type_form, model_form, year_form, result_div){
+async function getVehiclePrice(type_form, model_form, year_form, result_div, compare = false){
     var value = type_form.options[type_form.selectedIndex].value;
     var model_number = model_form.options[model_form.selectedIndex].id;
     var brand_number = model_form.options[model_form.selectedIndex].value;
@@ -171,60 +171,62 @@ async function getVehiclePrice(type_form, model_form, year_form, result_div){
     } else {
       return console.log("error")
     }
-    renderPrice(data, result_div)
-    document.getElementById("result").style.display = 'block';
-    window.location.href='#result';
+    renderPrice(data, result_div, compare)
+    result_div.style.display = 'block';
+    window.location.href = "#" + result_div.id;
 }
 
-function renderPrice(data, result_div){
-    result_div.innerHTML = '';
-    let list = '';
-    price = data['Valor']
-    brand = data['Marca']
-    model = data['Modelo']
-    year = data['AnoModelo']
-    fuel_type = data['Combustivel']
-    fipe_code = data['CodigoFipe']
-    month_reference = data['MesReferencia']
-    list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
-    <tbody>
-      <tr>
-        <th scope="row">Marca</th>
-        <td>${brand}</td>
-      </tr>
-      <tr>
-        <th scope="row">Modelo</th>
-        <td>${model}</td>
-      </tr>
-      <tr>
-        <th scope="row">Ano</th>
-        <td>${year}</td>
-      </tr>
-      <tr>
-        <th scope="row">Preço médio</th>
-        <td>${price}</td>
-      </tr>
-      <tr>
-        <th scope="row">Combustível</th>
-        <td>${fuel_type}</td>
-      </tr>
-      <tr>
-        <th scope="row">Código FIPE</th>
-        <td>${fipe_code}</td>
-      </tr>
-      <tr>
-        <th scope="row">Mês de referência</th>
-        <td>${month_reference}</td>
-      </tr>
-    </tbody>
+function renderPrice(data, result_div, compare = false){
+  result_div.innerHTML = '';
+  let list = '';
+  price = data['Valor']
+  brand = data['Marca']
+  model = data['Modelo']
+  year = data['AnoModelo']
+  fuel_type = data['Combustivel']
+  fipe_code = data['CodigoFipe']
+  month_reference = data['MesReferencia']
+  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
+  <tbody>
+    <tr>
+      <th scope="row">Marca</th>
+      <td>${brand}</td>
+    </tr>
+    <tr>
+      <th scope="row">Modelo</th>
+      <td>${model}</td>
+    </tr>
+    <tr>
+      <th scope="row">Ano</th>
+      <td>${year}</td>
+    </tr>
+    <tr>
+      <th scope="row">Preço médio</th>
+      <td>${price}</td>
+    </tr>
+    <tr>
+      <th scope="row">Combustível</th>
+      <td>${fuel_type}</td>
+    </tr>
+    <tr>
+      <th scope="row">Código FIPE</th>
+      <td>${fipe_code}</td>
+    </tr>
+    <tr>
+      <th scope="row">Mês de referência</th>
+      <td>${month_reference}</td>
+    </tr>
+  </tbody>
   </table>`
-    result_div.innerHTML += list;
+  result_div.innerHTML += list;
+  if (!compare){
     openNewTab(brand, model, year, price)
+  }
 }
 
-function openNewTab(brand, model, year){
-    var url = "https://www.google.com/search?q=" + brand + "+" + model + "+" + year + "&hl=pt_br&site=imghp&tbm=isch"
-    window.open(url, '', 'width=700,height=500')
+async function openNewTab(brand, model, year){
+  var url = "https://www.google.com/search?q=" + brand + "+" + model + "+" + year + "&hl=pt_br&site=imghp&tbm=isch"
+  window.open(url, '', 'width=700,height=500')
 }
 
 async function getAllYearsPrices(data, type_form, model_form){
@@ -252,58 +254,77 @@ async function getAllYearsPrices(data, type_form, model_form){
 } 
 
 function plotGraph(year_price){
-    var year_array = []
-    var price_array = []
-    for (let i = 0; i < year_price.length; i++){
-      year_array.push(year_price[i]['year'])
-      price_array.push(year_price[i]['price'])
+  console.log(year_price)
+  var year_array = []
+  var price_array = []
+  for (let i = 0; i < year_price.length; i++){
+    year_array.push(year_price[i]['year'])
+    price_array.push(year_price[i]['price'])
+  }
+
+  // Define the data
+  var data = [{
+    x: year_array,
+    y: price_array,
+    mode: 'lines+markers',
+    type: 'bar',
+    marker: {color: 'rgb(55, 83, 109)'}
+  }];
+  // Define the plot layout
+  var layout = {
+    title: 'Preço do modelo de acordo com o ano de fabricação',
+    xaxis: {
+      title: 'Ano do modelo',
+      range: [Math.min(year_array), Math.max(year_array)],
+      autotick: false
+    },
+    yaxis: {
+      title: 'Preço (R$)',
+      range: [Math.min(price_array), Math.max(price_array)],
+      tickprefix: 'R$',
     }
-  
-    // Define the data
-    var data = [{
-      x: year_array,
-      y: price_array,
-      mode: 'lines+markers',
-      type: 'bar',
-      marker: {color: 'rgb(55, 83, 109)'}
-    }];
-    // Define the plot layout
-    var layout = {
-      title: 'Preço do modelo de acordo com o ano de fabricação',
-      xaxis: {
-        title: 'Ano do modelo',
-        range: [Math.min(year_array), Math.max(year_array)],
-        autotick: false
-      },
-      yaxis: {
-        title: 'Preço (R$)',
-        range: [Math.min(price_array), Math.max(price_array)],
-        tickprefix: 'R$',
-      }
-    };
-    // Display the plot
-    Plotly.newPlot('plot', data, layout);
-    window.location.href='#plot';
+  };
+  // Display the plot
+  Plotly.newPlot('plot', data, layout);
+  window.location.href='#plot';
 }
 
 async function getPrice(year_number, type_form, model_form){
-    var value = type_form.options[type_form.selectedIndex].value;
-    var model_number = model_form.options[model_form.selectedIndex].id;
-    var brand_number = model_form.options[model_form.selectedIndex].value;
-    if (value == "car"){
-      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-      const data = await response.json()
-      return data['Valor']
-    } else if (value == "motorcycle"){
-      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-      const data = await response.json()
-      return data['Valor']
-    } else if (value == "truck"){
-      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
-      const data = await response.json()
-      return data['Valor']
-    } else {
-      console.log("error")
-    }
+  var value = type_form.options[type_form.selectedIndex].value;
+  var model_number = model_form.options[model_form.selectedIndex].id;
+  var brand_number = model_form.options[model_form.selectedIndex].value;
+  if (value == "car"){
+    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+    const data = await response.json()
+    return data['Valor']
+  } else if (value == "motorcycle"){
+    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+    const data = await response.json()
+    return data['Valor']
+  } else if (value == "truck"){
+    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos/" + year_number)
+    const data = await response.json()
+    return data['Valor']
+  } else {
+    console.log("error")
+  }
 }
+
+function search_compare(type_form_left, type_form_right, brand_form_left, brand_form_right, model_form_left, model_form_right, year_form_left, year_form_right, result_left, result_right){
+  var type_number_left = type_form_left.options[type_form_left.selectedIndex].value;
+  var type_number_right = type_form_right.options[type_form_right.selectedIndex].value;
+  var brand_number_left = brand_form_left.options[brand_form_left.selectedIndex].value;
+  var brand_number_right = brand_form_right.options[brand_form_right.selectedIndex].value;
+  var model_number_left = model_form_left.options[model_form_left.selectedIndex].value;
+  var model_number_right = model_form_right.options[model_form_right.selectedIndex].value;
+  var year_number_left = year_form_left.options[year_form_left.selectedIndex].value;
+  var year_number_right = year_form_right.options[year_form_right.selectedIndex].value;
+  if (type_number_left == "0" || brand_number_left == "0" || model_number_left == "0" || year_number_left == "0" || type_number_right == "0" || brand_number_right == "0" || model_number_right == "0" || year_number_right == "0"){
+    return alert("Selecione todos os campos para realizar a comparação")
+  } else {
+    getVehiclePrice(type_form_left, model_form_left, year_form_left, result_left, true)
+    getVehiclePrice(type_form_right, model_form_right, year_form_right, result_right, true)
+  }
+}
+
 

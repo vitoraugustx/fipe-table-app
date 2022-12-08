@@ -49,24 +49,24 @@
         <br>
         <div class="container text-center">
             <div class="row">
-              <div class="col">
+                <div class="col">
                     <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
+                    <select id = "form-vehicle-type-left" onchange="getVehicle(document.getElementById('form-vehicle-type-left'), document.getElementById('form-vehicle-brand-left'))">
                         <option value="0">Selecione a categoria do veículos</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
                     </select>    
                     <h6 id="form-title" class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
+                    <select id ="form-vehicle-brand-left" onchange="getModels(document.getElementById('form-vehicle-type-left'), document.getElementById('form-vehicle-brand-left'), document.getElementById('form-vehicle-model-left'))">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears(1)">
+                    <select id ="form-vehicle-model-left" onchange="getYears(document.getElementById('form-vehicle-type-left'), document.getElementById('form-vehicle-model-left'), document.getElementById('form-vehicle-year-left'), 1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Ano</h6>
-                    <select id ="form-vehicle-year">
+                    <select id ="form-vehicle-year-left">
                         <option value="0">Selecione o ano do veículo</option>
                     </select>
                     <br>
@@ -74,64 +74,40 @@
                 </div>
                 <div class="col">
                     <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
+                    <select id = "form-vehicle-type-right" onchange="getVehicle(document.getElementById('form-vehicle-type-right'), document.getElementById('form-vehicle-brand-right'))">
                         <option value="0">Selecione a categoria do veículos</option>
                         <option value="car">Carros e utilitários</option>
                         <option value="motorcycle">Motos</option>
                         <option value="truck">Caminhões e micro-ônibus</option>
                     </select>    
                     <h6 id="form-title" class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
+                    <select id ="form-vehicle-brand-right" onchange="getModels(document.getElementById('form-vehicle-type-right'), document.getElementById('form-vehicle-brand-right'), document.getElementById('form-vehicle-model-right'))">
                         <option value="0">Selecione a marca do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears(1)">
+                    <select id ="form-vehicle-model-right" onchange="getYears(document.getElementById('form-vehicle-type-right'), document.getElementById('form-vehicle-model-right'), document.getElementById('form-vehicle-year-right'), 1)">
                         <option value="0">Selecione o modelo do veículo</option>
                     </select>
                     <h6 id="form-title" class="fw-medium">Ano</h6>
-                    <select id ="form-vehicle-year">
+                    <select id ="form-vehicle-year-right">
                         <option value="0">Selecione o ano do veículo</option>
                     </select>
                 </div>
             </div>
-        </div>
-        <div class="container text-center">
+            <button type="button" class="btn btn-outline-success" onclick="search_compare(document.getElementById('form-vehicle-type-left'), document.getElementById('form-vehicle-type-right'), document.getElementById('form-vehicle-brand-left'), document.getElementById('form-vehicle-brand-right'), document.getElementById('form-vehicle-model-left'), document.getElementById('form-vehicle-model-right'), document.getElementById('form-vehicle-year-left'), document.getElementById('form-vehicle-year-right'), document.getElementById('result-left'), document.getElementById('result-right'))">Comparar</button>
+            <br>
+            <br>
+            <br>
             <div class="row">
-                <div class="col"></div> 
-                <div class="col-6">
-                    <h6 class="fw-medium">Categoria</h6>
-                    <select id = "form-vehicle-type" onchange="getVehicle()">
-                        <option value="0">Selecione a categoria do veículos</option>
-                        <option value="car">Carros e utilitários</option>
-                        <option value="motorcycle">Motos</option>
-                        <option value="truck">Caminhões e micro-ônibus</option>
-                    </select>
-                    <br>    
-                    <h6 id="form-title" class="fw-medium">Marca</h6>
-                    <select id ="form-vehicle-brand" onchange="getModels()">
-                        <option value="0">Selecione a marca do veículo</option>
-                    </select>
-                    <br>
-                    <h6 id="form-title" class="fw-medium">Modelo</h6>
-                    <select id ="form-vehicle-model" onchange="getYears(1)">
-                        <option value="0">Selecione o modelo do veículo</option>
-                    </select>
-                    <br>
-                    <h6 id="form-title" class="fw-medium">Ano</h6>
-                    <select id ="form-vehicle-year">
-                        <option value="0">Selecione o ano do veículo</option>
-                    </select>
-                    <br>
-                    <br>
-                    <button type="button" class="btn btn-outline-success" onclick="search(1)">Pesquisar</button>
-                    <br>
-                    <br>
-                    <div id="result"></div>
-                    <div id="plot" style="width:100%;max-width:900px"></div>
+                <div class="col">
+                    <div id="result-left"></div>
                 </div>
-                <div class="col"></div>
+                <div class="col">
+                    <div id="result-right"></div>
+                </div>
             </div>
         </div>
+        
         <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
             <div class="container text-center">
               <small>Copyright &copy; FIPE App</small>
