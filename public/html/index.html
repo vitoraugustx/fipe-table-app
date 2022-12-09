@@ -15,7 +15,7 @@
         <script src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
         <title>FIPE App</title>
     </head>
-    <body>
+    <body id="index-page">
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
               <a class="navbar-brand" href="/">FIPE App</a>
@@ -49,12 +49,29 @@
                     <br>
                     <p class="fw-medium">Para começar, clique no botão abaixo para pesquisar um veículo.</p>
                     <br>
-                    <a href="/search" class="btn btn-primary">Pesquisar veículo</a>
-                </div>
-                <div class="col">
-                    
-                </div>
+                    <a href="/search" class="btn btn-dark">Pesquisar veículo</a>
+                    <br>
+                    <br>
+                    <br>
+                    <p class="fw-medium">Outra função existente no aplicativo é a de ver uma comparação entre os preços de um mesmo modelo de veículo através de um gráfico. Tal função está disponível clicando no botão abaixo:</p>
+                    <br>
+                    <a href="/graph" class="btn btn-dark">Gráfico de preços</a>
+                    <br>
+                    <br>
+                    <br>
+                    <p class="fw-medium">Por fim, é possível comparar dois veículos diferentes. Para isso, clique no botão abaixo:</p>
+                    <br>
+                    <a href="/compare" class="btn btn-dark">Comparar veículos</a>
+                    <br>
+                    <br>
+                  </div>
+                <div class="col"></div>
             </div>
+      </div>
+      <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
+        <div class="container text-center">
+          <small>Copyright &copy; FIPE App</small>
         </div>
+      </footer>
     </body>
 </html>
