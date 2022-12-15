@@ -1,3 +1,8 @@
+body#index-page {
+    background-image: url("../imgs/18410.jpg");
+    background-size: 250%;
+}
+
 #sticky-footer {
     margin-top: 5%;
     bottom: 0;
@@ -25,12 +30,6 @@ select {
 
 #result {
     display: none;
-}
-
-#container {
-    margin: 5% auto;
-    width:80%;
-    background: #414141;
 }
 
 h6#form-title {
