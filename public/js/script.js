@@ -1,5 +1,10 @@
 const FIPE_URL = "https://parallelum.com.br/fipe/api"
 
+$(function () {
+  $("select").select2();
+});
+
+
 async function getVehicle(type_form, brand_form){
     type_form_value = type_form.value;
     let data
@@ -186,7 +191,7 @@ function renderPrice(data, result_div, compare = false){
   fuel_type = data['Combustivel']
   fipe_code = data['CodigoFipe']
   month_reference = data['MesReferencia']
-  list += `<br><hr><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
+  list += `<br><br><h4>Informações do veículo</h4><br><table class="table table-bordered table-dark table-responsive">
   <tbody>
     <tr>
       <th scope="row">Marca</th>
@@ -279,7 +284,7 @@ function plotGraph(year_price){
       autotick: false
     },
     yaxis: {
-      title: 'Preço (R$)',
+      title: 'Preço médio (R$)',
       range: [Math.min(price_array), Math.max(price_array)],
       tickprefix: 'R$',
     }
