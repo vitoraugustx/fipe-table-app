@@ -5,7 +5,7 @@ $(function () {
 });
 
 
-async function getVehicle(type_form, brand_form){
+async function getVehicle(type_form, brand_form, model_form, year_form = undefined){
     type_form_value = type_form.value;
     let data
     if (type_form_value == "car"){
@@ -23,7 +23,16 @@ async function getVehicle(type_form, brand_form){
     } else { 
       return console.log("error")
     }
-
+    // Resetando os forms
+    if (year_form != undefined){
+      // Caso o form de ano exista, resetar ele também
+      span_year = document.getElementById("select2-" + year_form.id + "-container");
+      span_year.innerHTML = "Selecione o ano do veículo";
+    }
+    span_brand = document.getElementById("select2-" + brand_form.id + "-container");
+    span_model = document.getElementById("select2-" + model_form.id + "-container");
+    span_brand.innerHTML = "Selecione a marca do veículo";
+    span_model.innerHTML = "Selecione o modelo do veículo";
     setDataToBrandForm(data, brand_form)
     
     // TODO: RESET MODEL FORM, YEAR FORM
@@ -43,7 +52,7 @@ function setDataToBrandForm(data, brand_form){
     brand_form.innerHTML += list;
 }
 
-async function getModels(type_form, brand_form, model_form){
+async function getModels(type_form, brand_form, model_form, year_form = undefined){
     var type_form_value = type_form.options[type_form.selectedIndex].value;
     var brand_number = brand_form.options[brand_form.selectedIndex].id;
     let data
@@ -62,7 +71,17 @@ async function getModels(type_form, brand_form, model_form){
     } else {
       return console.log("error")
     }
-
+    // Resetando os forms
+    if (year_form != undefined){
+      // Caso o form de ano exista, resetar ele também
+      span_year = document.getElementById("select2-" + year_form.id + "-container");
+      span_year.innerHTML = "Selecione o ano do veículo";
+    }
+    span_model = document.getElementById("select2-" + model_form.id + "-container");
+    // span_year = document.getElementById("select2-" + year_form.id + "-container");
+    span_model.innerHTML = "Selecione o modelo do veículo";
+    // span_year.innerHTML = "Selecione o ano do veículo";
+    // Setando os dados no próximo form
     setDataToModelForm(data, brand_number, model_form)
 
 }
@@ -111,7 +130,9 @@ async function getYears(type_form, model_form, year_form, type){
     }
 
     if (type == 1){
-        setDataToYearForm(data, year_form)
+      span_year = document.getElementById("select2-" + year_form.id + "-container");
+      span_year.innerHTML = "Selecione o ano do veículo";
+      setDataToYearForm(data, year_form)
     } else if (type == 2){
       let year_price = await getAllYearsPrices(data, type_form, model_form)
       plotGraph(year_price)
