@@ -207,7 +207,7 @@ function search(type_form, brand_form, model_form, year_form, result_div, type){
   }
 }
 
-// Função para pegar o preço do veículo
+// Função para pegar o preço do veículo e renderizar na tela
 async function getVehiclePrice(type_form, model_form, year_form, result_div, compare = false){
   // Pegando os valores dos forms selecionados
   var value = type_form.options[type_form.selectedIndex].value;
