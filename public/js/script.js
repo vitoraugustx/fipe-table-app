@@ -1,13 +1,18 @@
+// URL da API
 const FIPE_URL = "https://parallelum.com.br/fipe/api"
 
+// Função para transformar o formulário select em pesquisável (biblioteca select2)
 $(function () {
   $("select").select2();
 });
 
-
+// Função para pegar as marcas de veículos dependendo da categoria selecionada e colocar no form de marca
 async function getVehicle(type_form, brand_form, model_form, year_form = undefined){
+    // Pegando o valor selecionado do form de categoria
     type_form_value = type_form.value;
+    // Criando variável para armazenar os dados de resposta da API
     let data
+    // Verificando qual categoria foi selecionada e fazendo a requisição para a API
     if (type_form_value == "car"){
       let response = await fetch(FIPE_URL + "/v1/carros/marcas")
       data = await response.json()
@@ -25,7 +30,7 @@ async function getVehicle(type_form, brand_form, model_form, year_form = undefin
     }
     // Resetando os forms
     if (year_form != undefined){
-      // Caso o form de ano exista, resetar ele também
+      // Caso o form de ano exista, reseta ele também
       span_year = document.getElementById("select2-" + year_form.id + "-container");
       span_year.innerHTML = "Selecione o ano do veículo";
     }
@@ -33,14 +38,15 @@ async function getVehicle(type_form, brand_form, model_form, year_form = undefin
     span_model = document.getElementById("select2-" + model_form.id + "-container");
     span_brand.innerHTML = "Selecione a marca do veículo";
     span_model.innerHTML = "Selecione o modelo do veículo";
+    // Setando os dados no próximo form (marca)
     setDataToBrandForm(data, brand_form)
-    
-    // TODO: RESET MODEL FORM, YEAR FORM
 }
 
+// Função para setar os dados no form de marca
 function setDataToBrandForm(data, brand_form){
     brand_form.innerHTML = '';
     let list = '';
+    // Utiliza listagem dinâmica para setar os dados
     if (data.length <= 0){
       list += `<h3>Nenhuma marca de veículo disponível</h3>`
     } else {
@@ -52,10 +58,13 @@ function setDataToBrandForm(data, brand_form){
     brand_form.innerHTML += list;
 }
 
+// Função para pegar os modelos de veículos dependendo da marca e categoria selecionadas e colocar no form de modelo
 async function getModels(type_form, brand_form, model_form, year_form = undefined){
     var type_form_value = type_form.options[type_form.selectedIndex].value;
     var brand_number = brand_form.options[brand_form.selectedIndex].id;
+    // Criando variável para armazenar os dados de resposta da API
     let data
+    // Verificando qual categoria foi selecionada e fazendo a requisição para a API
     if (type_form_value == "car"){
       const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos")
       data = await response.json()
@@ -78,18 +87,18 @@ async function getModels(type_form, brand_form, model_form, year_form = undefine
       span_year.innerHTML = "Selecione o ano do veículo";
     }
     span_model = document.getElementById("select2-" + model_form.id + "-container");
-    // span_year = document.getElementById("select2-" + year_form.id + "-container");
     span_model.innerHTML = "Selecione o modelo do veículo";
-    // span_year.innerHTML = "Selecione o ano do veículo";
     // Setando os dados no próximo form
     setDataToModelForm(data, brand_number, model_form)
 
 }
 
+// Função para setar os dados no form de modelo
 function setDataToModelForm(json, brand_number, model_form){
     data = json['modelos']
     model_form.innerHTML = '';
     let list = '';
+    // Utiliza listagem dinâmica para setar os dados
     if (data.length <= 0){
       list += `<h3>Nenhum modelo de veículo disponível</h3>`
     } else {
@@ -101,47 +110,59 @@ function setDataToModelForm(json, brand_number, model_form){
     model_form.innerHTML += list;
 }
 
+// Função para pegar os anos de veículos dependendo da marca, categoria e modelo selecionados e colocar no form de ano
 async function getYears(type_form, model_form, year_form, type){
-    var value = type_form.options[type_form.selectedIndex].value;
-    var model_number = model_form.options[model_form.selectedIndex].id;
-    var brand_number = model_form.options[model_form.selectedIndex].value;  
-    let data
-    if (value == "car"){
-      const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-      data = await response.json()
-      
-    } else if (value == "motorcycle"){
-      const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-      data = await response.json()
+  // Pegando os valores dos forms selecionados
+  var value = type_form.options[type_form.selectedIndex].value;
+  var model_number = model_form.options[model_form.selectedIndex].id;
+  var brand_number = model_form.options[model_form.selectedIndex].value;  
+  let data
+  // Verificando qual categoria foi selecionada e fazendo a requisição para a API
+  if (value == "car"){
+    const response = await fetch(FIPE_URL + "/v1/carros/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+    data = await response.json()
+    
+  } else if (value == "motorcycle"){
+    const response = await fetch(FIPE_URL + "/v1/motos/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+    data = await response.json()
 
-    } else if (value == "truck"){
-      const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
-      data = await response.json()
+  } else if (value == "truck"){
+    const response = await fetch(FIPE_URL + "/v1/caminhoes/marcas/" + brand_number + "/modelos/" + model_number + "/anos")
+    data = await response.json()
 
-    } else {
-      return console.log("error")
-    }
+  } else {
+    return console.log("error")
+  }
 
-    // Tratamento para o código 32000-X (errado)
-    for (let i = 0; i < data.length; i++){
-        if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
-            data.splice(i, 1)
-        }
-    }
+  // Tratamento para o código 32000-X (errado)
+  // Percorre o array de dados e remove os que possuem o código 32000
+  for (let i = 0; i < data.length; i++){
+      if (data[i].codigo == '32000-1' || data[i].codigo == '32000-2' || data[i].codigo == '32000-3'){
+          data.splice(i, 1)
+      }
+  }
 
-    if (type == 1){
-      span_year = document.getElementById("select2-" + year_form.id + "-container");
-      span_year.innerHTML = "Selecione o ano do veículo";
-      setDataToYearForm(data, year_form)
-    } else if (type == 2){
-      let year_price = await getAllYearsPrices(data, type_form, model_form)
-      plotGraph(year_price)
-    }
+  // Flag para indicar se é uma pesquisa de veículo ou é para plotar o gráfico
+  // Flag = 1: pesquisa de veículo
+  // Flag = 2: plotar gráfico
+  if (type == 1){
+    span_year = document.getElementById("select2-" + year_form.id + "-container");
+    span_year.innerHTML = "Selecione o ano do veículo";
+    // Setando os dados no form de ano
+    setDataToYearForm(data, year_form)
+  } else if (type == 2){
+    // Pegando os dados de preço de cada ano
+    let year_price = await getAllYearsPrices(data, type_form, model_form)
+    // Plotando o gráfico
+    plotGraph(year_price)
+  }
 }
 
+// Função para setar os dados no form de ano
 function setDataToYearForm(data, year_form){
     year_form.innerHTML = '';
     let list = '';
+    // Utiliza listagem dinâmica para setar os dados
     if (data.length <= 0){
       list += `<h3>Nenhum ano de veículo disponível</h3>`
     } else {
@@ -153,29 +174,40 @@ function setDataToYearForm(data, year_form){
     year_form.innerHTML += list;
 }
 
+// Função para pegar o botão de pesquisa
 function search(type_form, brand_form, model_form, year_form, result_div, type){
-    if (type == 1){
-      var type_number = type_form.options[type_form.selectedIndex].value;
-      var brand_number = brand_form.options[brand_form.selectedIndex].value;
-      var model_number = model_form.options[model_form.selectedIndex].value;
-      var year_number = year_form.options[year_form.selectedIndex].value;
-      if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
-        return alert("Selecione todos os campos para realizar a busca")
-      } else {
-        getVehiclePrice(type_form, model_form, year_form, result_div)
-      }
-    } else if (type == 2){
-      var type_number = type_form.options[type_form.selectedIndex].value;
-      var brand_number = brand_form.options[brand_form.selectedIndex].value;
-      var model_number = model_form.options[model_form.selectedIndex].value;
-      if (type_number == "0" || brand_number == "0" || model_number == "0"){
-        return alert("Selecione todos os campos para realizar a busca")
-      } else {
-        getYears(type_form, model_form, undefined, 2)
-      }
+  // Verifica a flag para saber se é uma pesquisa de veículo ou é para plotar o gráfico
+  // Flag = 1: pesquisa de veículo
+  // Flag = 2: plotar gráfico
+  if (type == 1){
+    // Pegando os valores dos forms selecionados  
+    var type_number = type_form.options[type_form.selectedIndex].value;
+    var brand_number = brand_form.options[brand_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].value;
+    var year_number = year_form.options[year_form.selectedIndex].value;
+    // Verifica se todos os campos foram selecionados
+    if (type_number == "0" || brand_number == "0" || model_number == "0" || year_number == "0"){
+      return alert("Selecione todos os campos para realizar a busca")
+    } else {
+      // Chama a função para pegar o preço e informações do veículo
+      getVehiclePrice(type_form, model_form, year_form, result_div)
     }
+  } else if (type == 2){
+    // Pegando os valores dos forms selecionados
+    var type_number = type_form.options[type_form.selectedIndex].value;
+    var brand_number = brand_form.options[brand_form.selectedIndex].value;
+    var model_number = model_form.options[model_form.selectedIndex].value;
+    // Verifica se todos os campos foram selecionados
+    if (type_number == "0" || brand_number == "0" || model_number == "0"){
+      return alert("Selecione todos os campos para realizar a busca")
+    } else {
+      // Chama a função para pegar o preço de todos os anos do veículo
+      getYears(type_form, model_form, undefined, 2)
+    }
+  }
 }
 
+// Função para pegar o preço do veículo
 async function getVehiclePrice(type_form, model_form, year_form, result_div, compare = false){
     var value = type_form.options[type_form.selectedIndex].value;
     var model_number = model_form.options[model_form.selectedIndex].id;
