@@ -174,7 +174,7 @@ function setDataToYearForm(data, year_form){
     year_form.innerHTML += list;
 }
 
-// Função para pegar o botão de pesquisa
+// Função para o botão de pesquisa
 function search(type_form, brand_form, model_form, year_form, result_div, type){
   // Verifica a flag para saber se é uma pesquisa de veículo ou é para plotar o gráfico
   // Flag = 1: pesquisa de veículo

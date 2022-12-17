@@ -23,6 +23,7 @@
         <title>FIPE App | Pesquisa</title>
     </head>
     <body>
+        <!-- Menu navbar -->
         <nav class="navbar navbar-dark bg-dark">
             <div class="container-fluid">
               <a class="navbar-brand" href="/">FIPE App</a>
@@ -31,10 +32,11 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                  <a class="nav-link" aria-current="page" href="/">Home</a>
-                  <a class="nav-link active" href="/search">Pesquisar veículo</a>
-                  <a class="nav-link" href="/compare">Comparar veículos</a>
-                  <a class="nav-link" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
+                    <!-- Rotas para as outras páginas -->
+                    <a class="nav-link" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" href="/search">Pesquisar veículo</a>
+                    <a class="nav-link" href="/compare">Comparar veículos</a>
+                    <a class="nav-link" href="/graph">Preço do modelo em relação ao ano de fabricação</a>
                 </div>
               </div>
             </div>
@@ -58,6 +60,8 @@
             <div class="row">
                 <div class="col"></div> 
                 <div class="col-6">
+                    <!-- Formulário para a pesquisa de veículo -->
+                    <!-- Chama as funções ao mudar de opção -->
                     <h6 style="padding-top:1rem" class="fw-medium">Categoria</h6>
                     <select id = "form-vehicle-type" onchange="getVehicle(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'))">
                         <option value="0">Selecione a categoria do veículo</option>
@@ -80,15 +84,17 @@
                     <br>
                     <br>
                     <br>
+                    <!-- Botão para realizar a pesquisa de veículo -->
                     <button type="button" class="btn btn-outline-success" onclick="search(document.getElementById('form-vehicle-type'), document.getElementById('form-vehicle-brand'), document.getElementById('form-vehicle-model'), document.getElementById('form-vehicle-year'), document.getElementById('result'), 1)">Pesquisar</button>
                     <br>
                     <br>
+                    <!-- Área para o resultado da busca  -->
                     <div id="result"></div>
-                    <div id="plot" style="width:100%;max-width:900px"></div>
                 </div>
                 <div class="col"></div>
             </div>
         </div>
+        <!-- Rodapé da página -->
         <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
             <div class="container text-center">
               <small>&copy; Todos os direitos reservados à FIPE (Fundação Instituto de Pesquisas Econômicas)</small>
